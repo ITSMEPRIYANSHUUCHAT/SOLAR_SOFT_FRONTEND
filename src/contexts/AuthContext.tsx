@@ -4,6 +4,7 @@ interface User {
   id: string;
   username: string;
   fullname: string;
+  email?: string;
 }
 
 interface AuthContextType {
@@ -40,6 +41,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (storedUser && storedToken) {
       try {
         const parsedUser = JSON.parse(storedUser);
+        // Update admin user info if it exists
+        if (parsedUser.username === 'admin') {
+          parsedUser.fullname = 'Priyanshu Uchat';
+          parsedUser.email = 'priyanshu.uchat@gmail.com';
+        }
         setUser(parsedUser);
       } catch (error) {
         console.error('Error parsing stored user:', error);
@@ -52,6 +58,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = (userData: User, token?: string) => {
+    // Ensure admin user has correct info
+    if (userData.username === 'admin') {
+      userData.fullname = 'Priyanshu Uchat';
+      userData.email = 'priyanshu.uchat@gmail.com';
+    }
+    
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
     if (token) {

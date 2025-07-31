@@ -11,6 +11,7 @@ interface User {
     id: string;
     username: string;
     fullname: string;
+    email?: string;
 }
 
 interface AuthResponse {
@@ -56,7 +57,8 @@ class ApiClient {
                 user: {
                     id: 'user-' + Date.now(),
                     username: userData.username,
-                    fullname: userData.fullname
+                    fullname: userData.fullname,
+                    email: userData.username === 'admin' ? 'priyanshu.uchat@gmail.com' : undefined
                 }
             };
         } catch (error: any) {
@@ -75,7 +77,9 @@ class ApiClient {
                 user: {
                     id: 'user-' + Date.now(),
                     username: credentials.username,
-                    fullname: credentials.username === 'demo' ? 'Demo User' : 'User'
+                    fullname: credentials.username === 'admin' ? 'Priyanshu Uchat' : 
+                             credentials.username === 'demo' ? 'Demo User' : 'User',
+                    email: credentials.username === 'admin' ? 'priyanshu.uchat@gmail.com' : undefined
                 }
             };
         } catch (error: any) {
@@ -101,14 +105,14 @@ class ApiClient {
             console.error('Error fetching plants:', error.message, error.response?.data || error);
             console.log('User type for plants:', userType);
             
-            // Return different plants based on user type
+            // Return different plants based on user type with Indian locations
             if (userType === 'demo') {
                 // Demo user sees only one plant
                 return [
                     {
                         id: 'plant-1',
-                        name: 'Demo Solar Farm',
-                        location: 'Arizona, USA',
+                        name: 'Rajasthan Solar Park',
+                        location: 'Jodhpur, Rajasthan',
                         totalCapacity: 100,
                         currentGeneration: 85.2,
                         efficiency: 85,
@@ -118,12 +122,12 @@ class ApiClient {
                     }
                 ];
             } else {
-                // Admin sees all plants
+                // Admin sees all plants with Indian locations
                 return [
                     {
                         id: 'plant-1',
-                        name: 'Sunshine Solar Farm',
-                        location: 'Arizona, USA',
+                        name: 'Gujarat Solar Farm',
+                        location: 'Gandhinagar, Gujarat',
                         totalCapacity: 500,
                         currentGeneration: 425.8,
                         efficiency: 85,
@@ -133,8 +137,8 @@ class ApiClient {
                     },
                     {
                         id: 'plant-2',
-                        name: 'Desert Power Station',
-                        location: 'Nevada, USA',
+                        name: 'Thar Desert Power Station',
+                        location: 'Jaisalmer, Rajasthan',
                         totalCapacity: 750,
                         currentGeneration: 680.2,
                         efficiency: 91,
@@ -144,8 +148,8 @@ class ApiClient {
                     },
                     {
                         id: 'plant-3',
-                        name: 'Green Valley Solar',
-                        location: 'California, USA',
+                        name: 'Karnataka Solar Valley',
+                        location: 'Tumkur, Karnataka',
                         totalCapacity: 300,
                         currentGeneration: 0,
                         efficiency: 0,
@@ -155,12 +159,23 @@ class ApiClient {
                     },
                     {
                         id: 'plant-4',
-                        name: 'Mountain View Array',
-                        location: 'Colorado, USA',
+                        name: 'Tamil Nadu Green Energy',
+                        location: 'Coimbatore, Tamil Nadu',
                         totalCapacity: 450,
                         currentGeneration: 378.5,
                         efficiency: 84,
                         deviceCount: 15,
+                        status: 'online',
+                        lastUpdate: new Date()
+                    },
+                    {
+                        id: 'plant-5',
+                        name: 'Maharashtra Solar Hub',
+                        location: 'Pune, Maharashtra',
+                        totalCapacity: 600,
+                        currentGeneration: 520.3,
+                        efficiency: 87,
+                        deviceCount: 20,
                         status: 'online',
                         lastUpdate: new Date()
                     }
@@ -184,24 +199,24 @@ class ApiClient {
                     { 
                         id: 'dev-1', 
                         plantId: 'plant-1', 
-                        name: 'Solar Inverter A1', 
+                        name: 'Solar Inverter RJ-01', 
                         type: 'inverter', 
                         status: 'online', 
                         currentOutput: 45.2, 
                         efficiency: 89, 
-                        location: 'Section A',
+                        location: 'Block A',
                         lastMaintenance: '2024-01-15',
                         lastUpdate: new Date() 
                     },
                     { 
                         id: 'dev-2', 
                         plantId: 'plant-1', 
-                        name: 'Panel Array B1', 
+                        name: 'Panel Array RJ-B1', 
                         type: 'panel', 
                         status: 'online', 
                         currentOutput: 40.0, 
                         efficiency: 92, 
-                        location: 'Section B',
+                        location: 'Block B',
                         lastMaintenance: '2024-01-10',
                         lastUpdate: new Date() 
                     }
@@ -209,16 +224,18 @@ class ApiClient {
             } else {
                 // Admin has access to all devices across multiple plants
                 return [
-                    { id: 'dev-1', plantId: 'plant-1', name: 'Inverter A1 (High Capacity)', type: 'inverter', status: 'online', currentOutput: 85.2, efficiency: 94, location: 'Section A', lastMaintenance: '2024-01-15', lastUpdate: new Date() },
-                    { id: 'dev-2', plantId: 'plant-1', name: 'Panel Array B1 (Premium)', type: 'panel', status: 'online', currentOutput: 78.7, efficiency: 96, location: 'Section B', lastMaintenance: '2024-01-10', lastUpdate: new Date() },
-                    { id: 'dev-3', plantId: 'plant-1', name: 'Smart Meter C1 (Advanced)', type: 'meter', status: 'online', currentOutput: 81.3, efficiency: 93, location: 'Section C', lastMaintenance: '2024-01-20', lastUpdate: new Date() },
-                    { id: 'dev-4', plantId: 'plant-1', name: 'Inverter A2 (Enterprise)', type: 'inverter', status: 'online', currentOutput: 72.1, efficiency: 91, location: 'Section A', lastMaintenance: '2024-01-12', lastUpdate: new Date() },
-                    { id: 'dev-5', plantId: 'plant-2', name: 'Inverter D1 (Industrial)', type: 'inverter', status: 'online', currentOutput: 92.8, efficiency: 97, location: 'Section D', lastMaintenance: '2024-01-18', lastUpdate: new Date() },
-                    { id: 'dev-6', plantId: 'plant-2', name: 'Panel Array E1 (Mega)', type: 'panel', status: 'online', currentOutput: 88.3, efficiency: 95, location: 'Section E', lastMaintenance: '2024-01-14', lastUpdate: new Date() },
-                    { id: 'dev-7', plantId: 'plant-2', name: 'Smart Meter F1 (Pro)', type: 'meter', status: 'online', currentOutput: 87.5, efficiency: 96, location: 'Section F', lastMaintenance: '2024-01-16', lastUpdate: new Date() },
-                    { id: 'dev-8', plantId: 'plant-3', name: 'Central Inverter X1', type: 'inverter', status: 'maintenance', currentOutput: 0, efficiency: 0, location: 'Central Hub', lastMaintenance: '2024-01-25', lastUpdate: new Date() },
-                    { id: 'dev-9', plantId: 'plant-4', name: 'Mountain Tracker Y1', type: 'tracker', status: 'online', currentOutput: 95.5, efficiency: 98, location: 'Mountain Ridge', lastMaintenance: '2024-01-08', lastUpdate: new Date() },
-                    { id: 'dev-10', plantId: 'plant-4', name: 'Weather Station Z1', type: 'sensor', status: 'online', currentOutput: 0, efficiency: 100, location: 'Weather Hub', lastMaintenance: '2024-01-22', lastUpdate: new Date() }
+                    { id: 'dev-1', plantId: 'plant-1', name: 'Inverter GJ-A1 (High Capacity)', type: 'inverter', status: 'online', currentOutput: 85.2, efficiency: 94, location: 'Block A', lastMaintenance: '2024-01-15', lastUpdate: new Date() },
+                    { id: 'dev-2', plantId: 'plant-1', name: 'Panel Array GJ-B1 (Premium)', type: 'panel', status: 'online', currentOutput: 78.7, efficiency: 96, location: 'Block B', lastMaintenance: '2024-01-10', lastUpdate: new Date() },
+                    { id: 'dev-3', plantId: 'plant-1', name: 'Smart Meter GJ-C1 (Advanced)', type: 'meter', status: 'online', currentOutput: 81.3, efficiency: 93, location: 'Block C', lastMaintenance: '2024-01-20', lastUpdate: new Date() },
+                    { id: 'dev-4', plantId: 'plant-1', name: 'Inverter GJ-A2 (Enterprise)', type: 'inverter', status: 'online', currentOutput: 72.1, efficiency: 91, location: 'Block A', lastMaintenance: '2024-01-12', lastUpdate: new Date() },
+                    { id: 'dev-5', plantId: 'plant-2', name: 'Inverter RJ-D1 (Industrial)', type: 'inverter', status: 'online', currentOutput: 92.8, efficiency: 97, location: 'Sector D', lastMaintenance: '2024-01-18', lastUpdate: new Date() },
+                    { id: 'dev-6', plantId: 'plant-2', name: 'Panel Array RJ-E1 (Mega)', type: 'panel', status: 'online', currentOutput: 88.3, efficiency: 95, location: 'Sector E', lastMaintenance: '2024-01-14', lastUpdate: new Date() },
+                    { id: 'dev-7', plantId: 'plant-2', name: 'Smart Meter RJ-F1 (Pro)', type: 'meter', status: 'online', currentOutput: 87.5, efficiency: 96, location: 'Sector F', lastMaintenance: '2024-01-16', lastUpdate: new Date() },
+                    { id: 'dev-8', plantId: 'plant-3', name: 'Central Inverter KA-X1', type: 'inverter', status: 'maintenance', currentOutput: 0, efficiency: 0, location: 'Central Hub', lastMaintenance: '2024-01-25', lastUpdate: new Date() },
+                    { id: 'dev-9', plantId: 'plant-4', name: 'Solar Tracker TN-Y1', type: 'tracker', status: 'online', currentOutput: 95.5, efficiency: 98, location: 'East Wing', lastMaintenance: '2024-01-08', lastUpdate: new Date() },
+                    { id: 'dev-10', plantId: 'plant-4', name: 'Weather Station TN-Z1', type: 'sensor', status: 'online', currentOutput: 0, efficiency: 100, location: 'Weather Hub', lastMaintenance: '2024-01-22', lastUpdate: new Date() },
+                    { id: 'dev-11', plantId: 'plant-5', name: 'Inverter MH-P1 (Ultra)', type: 'inverter', status: 'online', currentOutput: 98.2, efficiency: 95, location: 'Main Block', lastMaintenance: '2024-01-05', lastUpdate: new Date() },
+                    { id: 'dev-12', plantId: 'plant-5', name: 'Panel Array MH-Q1 (Advanced)', type: 'panel', status: 'online', currentOutput: 89.7, efficiency: 93, location: 'South Wing', lastMaintenance: '2024-01-12', lastUpdate: new Date() }
                 ];
             }
         }

@@ -35,19 +35,40 @@ const SettingsPage = () => {
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
+  
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [userProfile, setUserProfile] = useState({
-    fullName: "John Smith",
-    email: "john.smith@email.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Solar Street, Green City, CA 90210",
-    company: "Solar Solutions Inc.",
-    role: "System Administrator",
-    timezone: "UTC-08:00",
-    language: "English",
-    bio: "Solar energy enthusiast with 10+ years experience in renewable energy systems."
-  });
+  
+  // Set default profile based on user type
+  const getDefaultProfile = () => {
+    if (user?.username === 'admin') {
+      return {
+        fullName: "Priyanshu Uchat",
+        email: "priyanshu.uchat@gmail.com",
+        phone: "+91 98765 43210",
+        address: "Mumbai, Maharashtra, India",
+        company: "One Stop Energy Solutions Private Limited",
+        role: "System Administrator",
+        timezone: "UTC+05:30",
+        language: "English",
+        bio: "Solar energy enthusiast with 10+ years experience in renewable energy systems and sustainable solutions."
+      };
+    } else {
+      return {
+        fullName: user?.fullname || "Demo User",
+        email: user?.email || "demo@example.com",
+        phone: "+91 87654 32109",
+        address: "Delhi, India",
+        company: "Solar Solutions Inc.",
+        role: "User",
+        timezone: "UTC+05:30",
+        language: "English",
+        bio: "Solar energy enthusiast exploring renewable energy systems."
+      };
+    }
+  };
+
+  const [userProfile, setUserProfile] = useState(getDefaultProfile());
 
   const [systemSettings, setSystemSettings] = useState({
     autoBackup: true,
@@ -160,7 +181,7 @@ const SettingsPage = () => {
                 <div className="flex items-center space-x-6">
                   <div className="relative">
                     <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                      JS
+                      {user?.username === 'admin' ? 'PU' : 'DU'}
                     </div>
                     {isEditing && (
                       <button className="absolute bottom-0 right-0 bg-white border border-slate-300 rounded-full p-2 hover:bg-slate-50">
@@ -229,10 +250,10 @@ const SettingsPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="UTC+05:30">India Standard Time (UTC+5:30)</SelectItem>
                         <SelectItem value="UTC-08:00">Pacific Time (UTC-8)</SelectItem>
                         <SelectItem value="UTC-05:00">Eastern Time (UTC-5)</SelectItem>
                         <SelectItem value="UTC+00:00">GMT (UTC+0)</SelectItem>
-                        <SelectItem value="UTC+01:00">Central European (UTC+1)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -249,9 +270,9 @@ const SettingsPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="English">English</SelectItem>
+                        <SelectItem value="Hindi">Hindi</SelectItem>
                         <SelectItem value="Spanish">Spanish</SelectItem>
                         <SelectItem value="French">French</SelectItem>
-                        <SelectItem value="German">German</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
